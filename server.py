@@ -1,16 +1,17 @@
-from flask import Flask, render_template, request 
+"""Flask server for Emotion Detection application."""
+from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion detector")
 
 @app.route("/emotionDetector")
-def sent_detector(): 
-    # Retrieve the text to detection from the request arguments 
+def sent_detector():
+    """Retrieve the text to detection from the request arguments"""
     text_to_analyze = request.args.get('textToAnalyze')
 
-    # Pass the text to the emotion_detector function and store the response 
+    # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyze)
-    
+
     if response is None or response['dominant_emotion'] is None:
         return "Invalid text! Please try again!"
 
@@ -20,12 +21,12 @@ def sent_detector():
     fear = response['fear']
     joy = response['joy']
     sadness = response['sadness']
-    dominant_emotion = response['dominant_emotion'] 
+    dominant_emotion = response['dominant_emotion']
 
     # Checking.
     if dominant_emotion is None:
         return "Invalid text! Please try again!"
-    
+
     # Return a formatted string
     return (
         "For the given statement, the system response is "
@@ -42,5 +43,5 @@ def render_index_page():
     '''
     return render_template('index.html')
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
